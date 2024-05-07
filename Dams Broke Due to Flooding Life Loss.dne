@@ -1,0 +1,298 @@
+// ~->[DNET-1]->~
+
+// File created by an unlicensed user using Netica 7.01 on May 06, 2024 at 23:49:47 UTC.
+
+bnet Dams_Broke_Due_to_Flooding_Pro {
+AutoCompile = TRUE;
+autoupdate = TRUE;
+whenchanged = 1715039384;
+
+visual V1 {
+	defdispform = BELIEFBARS;
+	nodelabeling = TITLE;
+	NodeMaxNumEntries = 50;
+	nodefont = font {shape= "Arial"; size= 9;};
+	linkfont = font {shape= "Arial"; size= 9;};
+	ShowLinkStrengths = 1;
+	windowposn = (78, 78, 1054, 420);
+	resolution = 72;
+	drawingbounds = (1515, 726);
+	showpagebreaks = FALSE;
+	usegrid = TRUE;
+	gridspace = (6, 6);
+	NodeSet Node {BuiltIn = 1; Color = 0x00e1e1e1;};
+	NodeSet Nature {BuiltIn = 1; Color = 0x00f8eed2;};
+	NodeSet Deterministic {BuiltIn = 1; Color = 0x00d3caa6;};
+	NodeSet Finding {BuiltIn = 1; Color = 0x00c8c8c8;};
+	NodeSet Constant {BuiltIn = 1; Color = 0x00ffffff;};
+	NodeSet ConstantValue {BuiltIn = 1; Color = 0x00ffffb4;};
+	NodeSet Utility {BuiltIn = 1; Color = 0x00ffbdbd;};
+	NodeSet Decision {BuiltIn = 1; Color = 0x00dee8ff;};
+	NodeSet Documentation {BuiltIn = 1; Color = 0x00f0fafa;};
+	NodeSet Title {BuiltIn = 1; Color = 0x00ffffff;};
+	PrinterSetting A {
+		margins = (1270, 1270, 1270, 1270);
+		};
+	};
+
+node Cloudy {
+	discrete = TRUE;
+	states = (Yes, No);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = ();
+	probs = 
+		// Yes          No           
+		  (0.2952394,   0.7047606);
+	whenchanged = 1715039374;
+	evidence = Yes;
+	belief = (1, 0);
+	visual V1 {
+		center = (594, 36);
+		height = 11;
+		};
+	};
+
+node Temperature {
+	discrete = TRUE;
+	states = (Yes, No);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = ();
+	probs = 
+		// Yes          No           
+		  (0.6694785,   0.3305215);
+	whenchanged = 1715039375;
+	evidence = Yes;
+	belief = (1, 0);
+	visual V1 {
+		center = (900, 30);
+		height = 12;
+		};
+	};
+
+node Rainfall {
+	discrete = TRUE;
+	states = (Yes, No);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (Cloudy, Temperature);
+	probs = 
+		// Yes          No            // Cloudy Temperature 
+		  (1,           0,            // Yes    Yes         
+		   0.5,         0.5,          // Yes    No          
+		   0.1,         0.9,          // No     Yes         
+		   0,           1);           // No     No          ;
+	ExperBase = 1;
+	whenchanged = 1715035480;
+	belief = (1, 0);
+	visual V1 {
+		center = (756, 132);
+		height = 9;
+		link 1 {
+			path = ((637, 63), (712, 106));
+			};
+		link 2 {
+			path = ((864, 57), (793, 106));
+			};
+		};
+	};
+
+node GroundwaterRecharge {
+	discrete = TRUE;
+	states = (Yes, No);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = ();
+	probs = 
+		// Yes          No           
+		  (0.7546415,   0.2453585);
+	whenchanged = 1715036737;
+	evidence = Yes;
+	belief = (1, 0);
+	visual V1 {
+		center = (1068, 192);
+		height = 5;
+		};
+	};
+
+node Water_Flow_Increase {
+	discrete = TRUE;
+	states = (Yes, No);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (Rainfall, GroundwaterRecharge);
+	probs = 
+		// Yes          No            // Rainfall GroundwaterRecharge 
+		  (0.9,         0.1,          // Yes      Yes                 
+		   0.9,         0.1,          // Yes      No                  
+		   0,           1,            // No       Yes                 
+		   0,           1);           // No       No                  ;
+	whenchanged = 1715036713;
+	belief = (0.9, 0.1);
+	visual V1 {
+		center = (756, 240);
+		height = 7;
+		};
+	};
+
+node Flooding_Start {
+	discrete = TRUE;
+	states = (Yes, No);
+	kind = NATURE;
+	chance = DETERMIN;
+	parents = (Water_Flow_Increase);
+	functable = 
+		                    // Water_Flow_Increase 
+		  (Yes,             // Yes                 
+		   No);             // No                  ;
+	whenchanged = 1715036009;
+	belief = (0.9, 0.1);
+	visual V1 {
+		center = (750, 342);
+		height = 1;
+		};
+	};
+
+node SoilErosion {
+	discrete = TRUE;
+	states = (Yes, No);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = ();
+	probs = 
+		// Yes          No           
+		  (0.107487,    0.892513);
+	whenchanged = 1715036748;
+	evidence = Yes;
+	belief = (1, 0);
+	visual V1 {
+		center = (522, 360);
+		height = 10;
+		};
+	};
+
+node FlashFlooding {
+	discrete = TRUE;
+	states = (Yes, No);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = ();
+	probs = 
+		// Yes          No           
+		  (0.3096679,   0.6903321);
+	whenchanged = 1715039384;
+	evidence = Yes;
+	belief = (1, 0);
+	visual V1 {
+		center = (504, 456);
+		height = 2;
+		};
+	};
+
+node RapidSnowmelt {
+	discrete = TRUE;
+	states = (Yes, No);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = ();
+	probs = 
+		// Yes          No           
+		  (0.324428,    0.675572);
+	whenchanged = 1715036752;
+	evidence = Yes;
+	belief = (1, 0);
+	visual V1 {
+		center = (984, 390);
+		height = 4;
+		};
+	};
+
+node OverflowingRivers {
+	discrete = TRUE;
+	states = (Yes, No);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = ();
+	probs = 
+		// Yes          No           
+		  (0.9120353,   0.0879647);
+	whenchanged = 1715036913;
+	evidence = Yes;
+	belief = (1, 0);
+	visual V1 {
+		center = (984, 456);
+		height = 3;
+		};
+	};
+
+node Dam_Break_Probability {
+	discrete = TRUE;
+	states = (No, yes);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (Flooding_Start, SoilErosion, FlashFlooding, RapidSnowmelt, OverflowingRivers);
+	probs = 
+		// No           yes           // Flooding_Start SoilErosion FlashFlooding RapidSnowmelt OverflowingRivers 
+		  (0,           1,            // Yes            Yes         Yes           Yes           Yes               
+		   0.1865987,   0.8134013,    // Yes            Yes         Yes           Yes           No                
+		   0.4005543,   0.5994457,    // Yes            Yes         Yes           No            Yes               
+		   0.2758896,   0.7241104,    // Yes            Yes         Yes           No            No                
+		   0.6558334,   0.3441666,    // Yes            Yes         No            Yes           Yes               
+		   0.2445006,   0.7554994,    // Yes            Yes         No            Yes           No                
+		   0.6433988,   0.3566012,    // Yes            Yes         No            No            Yes               
+		   0.9576083,   0.04239166,   // Yes            Yes         No            No            No                
+		   0.434634,    0.565366,     // Yes            No          Yes           Yes           Yes               
+		   0.4045511,   0.5954489,    // Yes            No          Yes           Yes           No                
+		   0.2103413,   0.7896587,    // Yes            No          Yes           No            Yes               
+		   0.1786262,   0.8213738,    // Yes            No          Yes           No            No                
+		   0.7625256,   0.2374745,    // Yes            No          No            Yes           Yes               
+		   0.2495271,   0.750473,     // Yes            No          No            Yes           No                
+		   0.7317032,   0.2682968,    // Yes            No          No            No            Yes               
+		   0.1020391,   0.8979609,    // Yes            No          No            No            No                
+		   0.6855322,   0.3144678,    // No             Yes         Yes           Yes           Yes               
+		   0.5653524,   0.4346476,    // No             Yes         Yes           Yes           No                
+		   0.65459,     0.3454099,    // No             Yes         Yes           No            Yes               
+		   0.4846581,   0.5153419,    // No             Yes         Yes           No            No                
+		   0.7764571,   0.2235429,    // No             Yes         No            Yes           Yes               
+		   0.3717951,   0.628205,     // No             Yes         No            Yes           No                
+		   0.3923874,   0.6076126,    // No             Yes         No            No            Yes               
+		   0.9568821,   0.04311797,   // No             Yes         No            No            No                
+		   0.220403,    0.779597,     // No             No          Yes           Yes           Yes               
+		   0.8160247,   0.1839753,    // No             No          Yes           Yes           No                
+		   0.3589963,   0.6410037,    // No             No          Yes           No            Yes               
+		   0.5018125,   0.4981875,    // No             No          Yes           No            No                
+		   0.1103208,   0.8896792,    // No             No          No            Yes           Yes               
+		   0.3732006,   0.6267993,    // No             No          No            Yes           No                
+		   0.8353454,   0.1646546,    // No             No          No            No            Yes               
+		   0.007328283, 0.9926717);   // No             No          No            No            No                ;
+	whenchanged = 1715036804;
+	belief = (0.06855322, 0.9314468);
+	visual V1 {
+		center = (750, 456);
+		height = 8;
+		link 2 {
+			path = ((583, 387), (688, 430));
+			};
+		};
+	};
+
+node Life_Loss_Alert {
+	discrete = TRUE;
+	states = (Yes, No);
+	kind = NATURE;
+	chance = DETERMIN;
+	parents = (Dam_Break_Probability);
+	functable = 
+		                    // Dam_Break_Probability 
+		  (No,              // No                    
+		   Yes);            // yes                   ;
+	whenchanged = 1715039368;
+	belief = (0.9314468, 0.06855322);
+	visual V1 {
+		center = (744, 552);
+		height = 6;
+		};
+	};
+ElimOrder = (Life_Loss_Alert, Cloudy, Temperature, Rainfall, GroundwaterRecharge, Water_Flow_Increase, Flooding_Start, SoilErosion, FlashFlooding, RapidSnowmelt, OverflowingRivers, Dam_Break_Probability);
+};
