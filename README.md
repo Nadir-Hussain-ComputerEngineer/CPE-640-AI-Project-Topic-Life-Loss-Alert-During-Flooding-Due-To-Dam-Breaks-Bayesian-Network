@@ -1,4 +1,4 @@
-# CPE-640-AI-Project-Topic-Life-Loss-Alert-During-Flooding-Due-To-Dam-Breaks-Bayesian-Network
+Life Loss Alert During Flooding Due To Dam BreaksDomain:Bayesian Network![Uploading image.png…]()
 Slide 1: Introduction to Netica Software
 •	What is Netica?
 •	Netica is a powerful software tool used for probabilistic reasoning and Bayesian network modeling.
